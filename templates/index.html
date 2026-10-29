@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>🛡️ Phishing URL Detector</h1>
+        <p>Machine Learning Based URL Security Analysis</p>
+    </header>
+
+    <main>
+        <!-- URL Scanner -->
+        <section class="scanner">
+            <form method="POST" action="/">
+                <input
+                    type="text"
+                    name="url"
+                    placeholder="Enter URL here"
+                    maxlength="2048"
+                    required
+                >
+                <button type="submit">Check URL</button>
+            </form>
+        </section>
+
+        <!-- Scan Result -->
+        {% if result %}
+        <section class="result">
+            <div class="result-message">{{ result }}</div>
+
+            <!-- Risk Score Card: only one copy -->
+            {% if scan_result %}
+            <div class="risk-score-card">
+                <div class="risk-score-info">
+                    <span class="risk-score-label">Security Risk Score</span>
+                    <span class="risk-score-value">{{ risk_score }}%</span>
+                </div>
+
+                <div class="risk-score-track">
+                    <div
+                        class="risk-score-fill {% if risk_score >= 70 %}high{% elif risk_score >= 40 %}medium{% else %}low{% endif %}"
+                        data-risk="{{ risk_score }}">
+                    </div>
+                </div>
+
+                <div class="risk-score-footer">
+                    <span>
+                        {% if risk_score >= 70 %}
+                            🔴 High Risk
+                        {% elif risk_score >= 40 %}
+                            🟡 Medium Risk
+                        {% else %}
+                            🟢 Low Risk
+                        {% endif %}
+                    </span>
+
+                    <span>{{ risk_score }}/100</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Typosquatting Warning -->
+            {% if typo_result and typo_result.suspicious %}
+            <div class="typo-warning">
+                <h3>⚠️ Possible Typosquatting Detected!</h3>
+                <p>
+                    This domain resembles
+                    <strong>{{ typo_result.similar_to }}</strong>.
+                </p>
+                <p>Similarity: {{ typo_result.similarity }}%</p>
+                <p>
+                    Verify the domain before sharing personal information.
+                </p>
+            </div>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        <!-- Domain Trust Check -->
+        {% if domain %}
+        <section class="domain-trust-card">
+            <h2>🛡️ Domain Trust Check</h2>
+
+            <div class="trust-item">
+                <span>Domain</span>
+                <strong>{{ domain }}</strong>
+            </div>
+
+            <div class="trust-item">
+                <span>HTTPS Protection</span>
+                <strong>
+                    {% if https_status == "Yes" %}
+                        Enabled
+                    {% else %}
+                        Not enabled
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="trust-item">
+                <span>Lookalike Domain Check</span>
+
+                {% if typo_result and typo_result.suspicious %}
+                    <strong class="trust-warning">
+                        ⚠️ Similar to {{ typo_result.similar_to }}
+                        ({{ typo_result.similarity }}% similarity)
+                    </strong>
+                {% elif typo_result %}
+                    <strong class="trust-safe">
+                        No close match found
+                    </strong>
+                {% else %}
+                    <strong>Not checked</strong>
+                {% endif %}
+            </div>
+
+            <p class="trust-note">
+                This check identifies possible warning signs; it cannot
+                guarantee that a website is safe.
+            </p>
+        </section>
+        {% endif %}
+
+        <!-- URL Analysis -->
+        {% if domain %}
+        <section class="url-analysis">
+            <h2>🔍 URL Analysis</h2>
+
+            <div class="analysis-row">
+                <span>Protocol</span>
+                <strong>{{ protocol }}</strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>Domain</span>
+                <strong>{{ domain }}</strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>Path</span>
+                <strong>{{ path }}</strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>IP Address Used</span>
+                <strong>{{ has_ip }}</strong>
+            </div>
+
+            {% if url_intelligence %}
+            <div class="analysis-row">
+                <span>URL Length</span>
+                <strong>
+                    {{ url_intelligence.get('url_length', 'N/A') }} characters
+                </strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>Number of Dots</span>
+                <strong>{{ url_intelligence.get('dots', 'N/A') }}</strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>Number of Hyphens</span>
+                <strong>{{ url_intelligence.get('hyphens', 'N/A') }}</strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>HTTPS Enabled</span>
+                <strong>
+                    {{ url_intelligence.get('https_enabled', 'N/A') }}
+                </strong>
+            </div>
+
+            <div class="analysis-row">
+                <span>Suspicious Keywords</span>
+                <strong>
+                    {% if url_intelligence.get('suspicious_keywords') %}
+                        {{ url_intelligence.get('suspicious_keywords') | join(', ') }}
+                    {% else %}
+                        None detected
+                    {% endif %}
+                </strong>
+            </div>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        <!-- Scan Dashboard -->
+        <section class="dashboard-section">
+            <h2 class="dashboard-title">📊 Scan Dashboard</h2>
+
+            <div class="dashboard">
+                <div class="stat-card">
+                    <div class="stat-number">{{ total_scans }}</div>
+                    <div class="stat-label">Total Scans</div>
+                </div>
+
+                <div class="stat-card normal-card">
+                    <div class="stat-number">{{ normal_count }}</div>
+                    <div class="stat-label">Normal URLs</div>
+                </div>
+
+                <div class="stat-card suspicious-card">
+                    <div class="stat-number">{{ suspicious_count }}</div>
+                    <div class="stat-label">Suspicious URLs</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phishing Investigation Report -->
+        {% if investigation_details %}
+        <section class="investigation-card">
+            <h2>🔍 Phishing Investigation Report</h2>
+            <p>Findings from your URL scan:</p>
+
+            <ul>
+                {% for detail in investigation_details %}
+                <li>{{ detail }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        <!-- Scan History -->
+        <section class="history-section">
+            <h2 class="history-title">Scan History</h2>
+
+            <div class="history-controls">
+                <input
+                    type="text"
+                    id="historySearch"
+                    placeholder="🔍 Search scanned URLs..."
+                    oninput="filterHistory()"
+                >
+
+                <select id="historyFilter" onchange="filterHistory()">
+                    <option value="all">All Results</option>
+                    <option value="normal">Normal</option>
+                    <option value="suspicious">Suspicious</option>
+                </select>
+            </div>
+
+            <div class="history-actions">
+                <a
+                    href="{{ url_for('clear_history') }}"
+                    class="clear-history"
+                    onclick="return confirm('Are you sure you want to clear all scan history?')"
+                >
+                    Clear History
+                </a>
+
+                <button type="button" onclick="downloadReport()">
+                    Download Report
+                </button>
+            </div>
+
+            <div id="historyList">
+                {% if history %}
+                    {% for item in history %}
+                    <div
+                        class="history-item"
+                        data-result="{{ item['result'] | lower }}"
+                        data-url="{{ item['url'] | lower }}"
+                    >
+                        <div class="history-url">{{ item["url"] }}</div>
+
+                        <div class="history-details">
+                            {% if item["result"] == "Suspicious" %}
+                                <strong class="suspicious">
+                                    ⚠️ Suspicious
+                                </strong>
+                            {% else %}
+                                <strong class="normal">
+                                    ✅ Normal
+                                </strong>
+                            {% endif %}
+
+                            <span class="history-risk">
+                                Risk Score: {{ item["risk_score"] }}%
+                            </span>
+
+                            <span class="history-time">
+                                🕒 {{ item["scanned_at"] }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No URLs scanned yet.</p>
+                {% endif %}
+            </div>
+
+            <p id="noHistoryResults" hidden>
+                No matching scan history found.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            🛡️ Phishing URL Detector | Machine Learning Security Project
+        </p>
+        <p>
+            Always verify a website before sharing sensitive information.
+        </p>
+    </footer>
+
+    <script>
+        // Set risk bar width from the score without inline Jinja CSS.
+        document.querySelectorAll(".risk-score-fill").forEach(function (bar) {
+            const score = Number(bar.dataset.risk);
+            const safeScore = Number.isFinite(score)
+                ? Math.max(0, Math.min(100, score))
+                : 0;
+
+            bar.style.width = safeScore + "%";
+        });
+
+        // Search and filter scan history.
+        function filterHistory() {
+            const searchInput = document
+                .getElementById("historySearch")
+                .value.toLowerCase();
+
+            const filterValue = document
+                .getElementById("historyFilter")
+                .value;
+
+            const items = document.querySelectorAll(".history-item");
+            let visibleCount = 0;
+
+            items.forEach(function (item) {
+                const url = item.dataset.url || "";
+                const result = item.dataset.result || "";
+
+                const matchesSearch = url.includes(searchInput);
+                const matchesFilter =
+                    filterValue === "all" || result === filterValue;
+
+                const visible = matchesSearch && matchesFilter;
+                item.style.display = visible ? "" : "none";
+
+                if (visible) {
+                    visibleCount++;
+                }
+            });
+
+            document.getElementById("noHistoryResults").hidden =
+                visibleCount !== 0;
+        }
+
+        // Download scan history as CSV.
+        function downloadReport() {
+            const rows = [
+                ["URL", "Result", "Risk Score", "Scan Time"]
+            ];
+
+            document.querySelectorAll(".history-item").forEach(function (item) {
+                if (item.style.display === "none") {
+                    return;
+                }
+
+                const url =
+                    item.querySelector(".history-url")?.innerText.trim() || "";
+
+                const result =
+                    item.querySelector(".history-details strong")?.innerText.trim() || "";
+
+                const risk =
+                    item.querySelector(".history-risk")?.innerText.trim() || "";
+
+                const time =
+                    item.querySelector(".history-time")?.innerText.trim() || "";
+
+                rows.push([url, result, risk, time]);
+            });
+
+            function escapeCSV(value) {
+                return '"' + String(value).replace(/"/g, '""') + '"';
+            }
+
+            const csv = rows
+                .map(function (row) {
+                    return row.map(escapeCSV).join(",");
+                })
+                .join("\r\n");
+
+            const blob = new Blob(
+                ["\uFEFF" + csv],
+                { type: "text/csv;charset=utf-8;" }
+            );
+
+            const link = document.createElement("a");
+            const objectUrl = URL.createObjectURL(blob);
+
+            link.href = objectUrl;
+            link.download = "phishing_scan_report.csv";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            URL.revokeObjectURL(objectUrl);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+
+/* =========================
+   GENERAL PAGE STYLING
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1f2937;
+}
+
+.page-header {
+    text-align: center;
+    padding: 28px 16px 10px;
+}
+
+.page-header h1 {
+    margin: 0 0 12px;
+    font-size: 38px;
+    color: #111827;
+}
+
+.page-header p {
+    margin: 0;
+    font-size: 17px;
+    color: #4b5563;
+}
+
+main {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* =========================
+   URL SCANNER
+========================= */
+
+.scanner {
+    width: 100%;
+    max-width: 850px;
+    margin: 10px auto 24px;
+}
+
+.scanner form {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin: 0;
+}
+
+input[type="text"],
+select {
+    font-family: inherit;
+}
+
+.scanner input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    background: white;
+}
+
+.scanner input[type="text"]:focus {
+    border-color: #4f46e5;
+}
+
+button {
+    padding: 14px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #3730a3;
+}
+
+/* =========================
+   SCAN RESULT
+========================= */
+
+.result {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    white-space: normal;
+}
+
+.result-message {
+    padding: 12px 4px;
+    background: white;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   RISK SCORE CARD
+========================= */
+
+.risk-score-card {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 20px;
+    background: #f8fafc;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+}
+
+.risk-score-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.risk-score-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.risk-score-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Background of the cylindrical bar */
+.risk-score-track {
+    display: block;
+    width: 100%;
+    height: 12px;
+    margin: 0;
+    padding: 0;
+    background-color: #e2e8f0;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+/* Coloured portion of the bar */
+.risk-score-fill {
+    display: block;
+    height: 100%;
+    min-height: 12px;
+    border-radius: 50px;
+    transition: width 0.4s ease;
+}
+
+.risk-score-fill.low {
+    background-color: #22c55e !important;
+}
+
+.risk-score-fill.medium {
+    background-color: #facc15 !important;
+}
+
+.risk-score-fill.high {
+    background-color: #ef4444 !important;
+}
+
+.risk-score-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* =========================
+   TYPOSQUATTING WARNING
+========================= */
+
+.typo-warning {
+    margin: 0;
+    padding: 18px 20px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 5px solid #f97316;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.typo-warning h3 {
+    margin: 0 0 12px;
+    color: #9a3412;
+}
+
+.typo-warning p {
+    margin: 8px 0;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* =========================
+   DOMAIN TRUST CHECK
+========================= */
+
+.domain-trust-card {
+    width: 100%;
+    max-width: 900px;
+    margin: 16px auto;
+    padding: 20px 24px;
+    background: white;
+    border: 1px solid #dce4f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(20, 40, 80, 0.06);
+}
+
+.domain-trust-card h2 {
+    margin: 0 0 14px;
+    color: #172b4d;
+    font-size: 21px;
+}
+
+.trust-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid #e8edf5;
+}
+
+.trust-item span {
+    color: #52627a;
+}
+
+.trust-item strong {
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.trust-warning {
+    color: #dc2626;
+}
+
+.trust-safe {
+    color: #15803d;
+}
+
+.trust-note {
+    margin: 12px 0 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+/* =========================
+   URL ANALYSIS
+========================= */
+
+.url-analysis {
+    width: 100%;
+    max-width: 900px;
+    margin: 16px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #dce4f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(20, 40, 80, 0.05);
+}
+
+.url-analysis h2 {
+    margin: 0 0 16px;
+    font-size: 22px;
+    color: #111827;
+}
+
+.analysis-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.analysis-row span {
+    color: #475569;
+}
+
+.analysis-row strong {
+    color: #111827;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   SCAN DASHBOARD
+========================= */
+
+.dashboard-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 24px auto;
+}
+
+.dashboard-title {
+    text-align: center;
+    margin: 0 0 20px;
+    font-size: 28px;
+    color: #111827;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.stat-card {
+    min-width: 0;
+    padding: 22px 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+}
+
+.stat-number {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4b5563;
+    overflow-wrap: anywhere;
+}
+
+.normal-card .stat-number {
+    color: #16a34a;
+}
+
+.suspicious-card .stat-number {
+    color: #ea580c;
+}
+
+/* =========================
+   INVESTIGATION REPORT
+========================= */
+
+.investigation-card {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #dce4f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(20, 40, 80, 0.05);
+}
+
+.investigation-card h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    color: #172b4d;
+}
+
+.investigation-card p {
+    text-align: left;
+    font-size: 15px;
+}
+
+.investigation-card ul {
+    padding-left: 24px;
+    line-height: 1.7;
+}
+
+.investigation-card li {
+    margin-bottom: 6px;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   SCAN HISTORY
+========================= */
+
+.history-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 28px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #dce4f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(20, 40, 80, 0.05);
+}
+
+.history-title {
+    text-align: center;
+    margin: 0 0 20px;
+    font-size: 28px;
+    color: #111827;
+}
+
+.history-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.history-controls input,
+.history-controls select {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+.history-controls input {
+    flex: 1;
+}
+
+.history-controls select {
+    width: 170px;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.clear-history {
+    display: inline-block;
+    padding: 12px 16px;
+    background: #374151;
+    color: white;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+.clear-history:hover {
+    background: #111827;
+}
+
+.history-item {
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    padding: 16px 18px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.history-url {
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.history-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.suspicious {
+    color: #ea580c;
+    white-space: nowrap;
+}
+
+.normal {
+    color: #16a34a;
+    white-space: nowrap;
+}
+
+.history-risk {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.history-time {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 35px;
+    padding: 22px 16px;
+    background: #111827;
+    color: #d1d5db;
+    text-align: center;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 6px 0;
+    color: #d1d5db;
+    font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 650px) {
+    .page-header h1 {
+        font-size: 29px;
+    }
+
+    .page-header p {
+        font-size: 15px;
+    }
+
+    main {
+        padding: 12px;
+    }
+
+    .scanner form {
+        flex-direction: column;
+    }
+
+    .scanner form button {
+        width: 100%;
+    }
+
+    .result-message {
+        font-size: 17px;
+    }
+
+    .risk-score-card,
+    .domain-trust-card,
+    .url-analysis,
+    .investigation-card,
+    .history-section {
+        padding: 16px;
+    }
+
+    .risk-score-label {
+        font-size: 16px;
+    }
+
+    .risk-score-value {
+        font-size: 21px;
+    }
+
+    .trust-item,
+    .analysis-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .history-controls {
+        flex-direction: column;
+    }
+
+    .history-controls select {
+        width: 100%;
+    }
+
+    .history-actions {
+        flex-wrap: wrap;
+    }
+}
